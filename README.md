@@ -1,10 +1,12 @@
 # AWS Slipstream
 
-** ALPHA ** This library is currently under active development.
+** ALPHA ** This library is currently under active development, don't depend on it for anything yet!
 
-NodeJS package which smoothes some of the configuration required when working with NodeJS and AWS. This package works well with it's sibling [Microservices CDK Constructs](https://github.com/elseano/cdk-microservice-constructs), however it's not a requirement that you use it.
+NodeJS package which smoothes some of the configuration required when working with NodeJS and AWS. This package works well with it's sibling [Slipstream CDK Constructs](https://github.com/elseano/cdk-microservice-constructs), however it's not a requirement that you use it.
 
-Slipstream codifies best practice by:
+The main idea with these two libraries is to streamline the myriad things one needs to configure for production grade deployments. Due to the problem being solved AWS Slipstream is somewhat opinionated, preferring a simple experience over infinite configuration options.
+
+Slipstream aims to codify best practice by:
 
 - Linking request tracing and log correlation.
 - Including rich metadata searchable by CloudWatch Insights.
