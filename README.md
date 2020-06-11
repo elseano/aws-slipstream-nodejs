@@ -13,20 +13,35 @@ Slipstream codifies best practice by:
 
 Provides Winston formatters which help when streaming logs to CloudWatch Logs (using either the CloudWatch Logs Agent, or awslogs docker driver) ensuring log entries are split correctly.
 
+There are two timestamp formats provided, an ISO8601 format, and a simpler format without timezone information (assumes UTC). For each format object, there's a `winstonTimestamp` property, and a `cloudWatchFormat` property which represents matching format to use in CloudWatch Agent, or awslog driver.
+
 ```javascript
 const { cloudWatchWinston } = require('aws-slipstream-nodejs');
 const winston = require('winston');
 
 const logger = winston.createLogger({
-  format: cloudWatchWinston.cloudWatchTimestamp(),
+  format: cloudWatchWinston.ISO8601.winstonTimestamp,
 });
 ```
 
-Additionally, it provides a rendering formatter, or you can use your own:
+If setting up infrastructure using CDK to handle the above, you might do something like this:
+
+```typescript
+taskDefinition.addContainer("Container", {
+      image: new ecs.EcrImage(this.imageRepository, "latest"),
+      logging: new ecs.AwsLogDriver({
+        ...
+        datetimeFormat: cloudwatchWinston.ISO8601.cloudWatchFormat,
+      }),
+      ...
+    });
+```
+
+Additionally the `cloudWatchWinston` submodule provides a rendering formatter, or you can use your own:
 
 ```javascript
 const format = winston.format.combine([
-  cloudWatchWinston.cloudWatchTimestamp(),
+  cloudWatchWinston.ISO8601.winstonTimestamp,
   cloudWatchWinston.cloudWatchFormatter(),
 ]);
 
@@ -90,7 +105,7 @@ const {
 var app = express();
 
 const format = winston.format.combine([
-  cloudWatchWinston.cloudWatchTimestamp(),
+  cloudWatchWinston.ISO8601.winstonTimestamp,
   expressRequestId.winstonFormatter({ addToMessage: true }),
   cloudWatchWinston.cloudWatchFormatter(),
 ]);

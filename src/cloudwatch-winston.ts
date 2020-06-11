@@ -23,16 +23,23 @@ export const cloudWatchFormatter = winston.format.printf(
  * This tweaks the NodeJS default, shifting the fractional part of the seconds to
  * the end of the timestamp, which we then configure CloudWatch to ignore.
  *
- * * Before: `2020-02-20T12:34:23.231Z`
- * * After: `2020-02-20T12:34:23Z +0.231s`
- *
  * You'll need to configure either the CloudWatch Logs Agent, or
- * awslogs to match this format: `%Y-%m-%dT%H:%M:%SZ`.
+ * awslogs to match this format: `%Y-%m-%dT%H:%M:%S.%f%z`.
  *
  * * For CloudWatch Logs Agent, set `datetime_format` to the above value.
  * * For AWSLogs Driver, set `awslogs-datetime-format` to the above value.
  *
  */
-export const cloudWatchTimestamp = winston.format.timestamp({
-  format: 'YYYY-MM-DDTHH:mm:ssZZ +.SSS',
-});
+export const ISO8601 = {
+  winstonFormat: winston.format.timestamp({
+    format: 'YYYY-MM-DDTHH:mm:ss.SSSZZ',
+  }),
+  cloudwatchFormat: '%Y-%m-%dT%H:%M:%S.%f%z',
+};
+
+export const Simple = {
+  winstonFormat: winston.format.timestamp({
+    format: 'YYYY-MM-DD HH:mm:ss.SSS',
+  }),
+  cloudwatchFormat: '%Y-%m-%d %H:%M:%S.%f',
+};
